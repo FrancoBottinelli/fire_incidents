@@ -8,6 +8,16 @@ Both resources are Dockerized for compatibility and instantiation purposes
 First of all, Docker is required for the app to be able to deploy locally. 
 Visit https://docs.docker.com/engine/install/ for install instructions
 
+Some environemnt variables are needed for the selected resources.
+A ```.env``` file should be created for docker-compose to integrate.
+
+#### Required variables with example values
+```
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=postgres
+```
+
 Once Docker is up and running, with root directory on this application, execute the following command
 
 ``` docker-compose up --build ```
@@ -67,6 +77,11 @@ with this scale of data.
 Docker is a must in a project of this sort; I used it for local development purposes
 in this case, allowing me to reduce deployment steps in any machine to 1. Of course, it is also very powerful
 for testing and cloud deployment purposes, but those exceed the purpose of this challenge.
+
+SQLAlchemy is a great SQL modeler, and with some abstraction its very easy to manage your database structure 
+and data integrity. Based on decisions explained further, Alchemy was not used as and ORM query builder, but its
+also very powerful in that regard, considering your queries are somewhat simple. Exceeding those cases, you can
+always write raw SQL queries.
 
 Navigating through the website of the dataset, I found two viable options for data retrieval,
 through CSV or API. I've found the API path to be more suitable for the exercise, though CSV downloads
