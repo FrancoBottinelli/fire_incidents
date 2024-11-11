@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_static:/var/lib/postgresql/data
+    networks:
+      - tn_network
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+
+  python_app:
+    build: .
+    image: python:3.12
+    container_name: python_app
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    command: python app.py
+    networks:
+      - tn_network
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+
+networks:
+  tn_network:
+
+volumes:
+  postgres_static:
