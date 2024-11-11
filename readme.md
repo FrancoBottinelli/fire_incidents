@@ -9,6 +9,7 @@ First of all, Docker is required for the app to be able to deploy locally.
 Visit https://docs.docker.com/engine/install/ for install instructions
 
 Once Docker is up and running, with root directory on this application, execute the following command
+
 ``` docker-compose up --build ```
 
 This command should instanciate a _PostgreSQL database_ and a _Python app with a Flask server_
@@ -59,19 +60,31 @@ Dataset columns are also specified in this endpoint!
 ```
 
 ### Findings and thought process
+Resources were selected based on the challenge needs and my experience. Though conceptually this data does 
+not seem to work relationally, it's the structure I have the most experience with and I know works just fine
+with this scale of data. 
+
+Docker is a must in a project of this sort; I used it for local development purposes
+in this case, allowing me to reduce deployment steps in any machine to 1. Of course, it is also very powerful
+for testing and cloud deployment purposes, but those exceed the purpose of this challenge.
+
 Navigating through the website of the dataset, I found two viable options for data retrieval,
 through CSV or API. I've found the API path to be more suitable for the exercise, though CSV downloads
-might be faster for larger amounts of data
+might be faster for larger amounts of data.
 
-I've found the data preety standarized and well layed out in general, so I gave a low priority to data
+Data models and sources are abstracted for scalability purposes, this application is designed to grow and
+be able to handle multiple sources to multiple models, so each has a Base Model with standard methods and
+exceptions are handled in specific classes.
+
+I've found the data pretty standarized and well layed out in general, so I gave a low priority to data
 transformation and validation. Nevertheless, these concepts are a must in a production environment, so I
 designed for added features in my code layout, having the flexibility for each data model to have its own
-transformations and validations upon instantiation
+transformations and validations upon instantiation.
 
 A choice I made with data structure was to clean some of the columns of the dataset, I saw lots of 
 columns that rarely had any relevant data, so my choice was to group all these details into a 
 'incident_details' column, where columns that were not specified in the SQL model would be added to
-this column if they had any relevant values, cleaning lots of empty registers in the process
+this column if they had any relevant values, cleaning lots of empty registers in the process.
 
 For the reports, I opted for a managed Flask server where a potential B.I team could retrieve data
 from the model through an API gateway and a set of limited attributes.
@@ -79,4 +92,4 @@ The choice here is tricky, it depends on the use case of the B.I team. This opti
 flexibility in the team needs for data reports, but not unmanaged access (like opening an endpoint where they
 could input a raw SQL query), or a more unflexible approach, opening a different gateway for each report that they
 need. This is of course a group debate on what the team needs are, and a choice can be made depending on their
-feedback. Having no such scenario, I opted for an all rounded soultion.
+feedback. Having no such scenario, I opted for an all rounded solution.
