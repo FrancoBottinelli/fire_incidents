@@ -41,6 +41,10 @@ Each Dict should specify ```column, operator and value```
 ``` order_by ``` (optional) -> Order criteria for the response. Expressed in a Dict object,
 keys being the column and values being the sort style
 
+Dataset columns are also specified in this endpoint!
+
+``` http://localhost:5000/fire_incidents/table ```
+
 ### Example payload
 ```
 {
@@ -53,3 +57,26 @@ keys being the column and values being the sort style
 	"order_by": {"incident_date": "ASC"}
 }
 ```
+
+### Findings and thought process
+Navigating through the website of the dataset, I found two viable options for data retrieval,
+through CSV or API. I've found the API path to be more suitable for the exercise, though CSV downloads
+might be faster for larger amounts of data
+
+I've found the data preety standarized and well layed out in general, so I gave a low priority to data
+transformation and validation. Nevertheless, these concepts are a must in a production environment, so I
+designed for added features in my code layout, having the flexibility for each data model to have its own
+transformations and validations upon instantiation
+
+A choice I made with data structure was to clean some of the columns of the dataset, I saw lots of 
+columns that rarely had any relevant data, so my choice was to group all these details into a 
+'incident_details' column, where columns that were not specified in the SQL model would be added to
+this column if they had any relevant values, cleaning lots of empty registers in the process
+
+For the reports, I opted for a managed Flask server where a potential B.I team could retrieve data
+from the model through an API gateway and a set of limited attributes.
+The choice here is tricky, it depends on the use case of the B.I team. This option allows for certain
+flexibility in the team needs for data reports, but not unmanaged access (like opening an endpoint where they
+could input a raw SQL query), or a more unflexible approach, opening a different gateway for each report that they
+need. This is of course a group debate on what the team needs are, and a choice can be made depending on their
+feedback. Having no such scenario, I opted for an all rounded soultion.
